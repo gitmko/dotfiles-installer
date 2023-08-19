@@ -7,8 +7,9 @@ username=$(id -u -n 1000)
 mkdir -p /usr/share/themes/
 cd /usr/share/themes/
 git clone https://github.com/EliverLara/Nordic.git
+clear
 
-echo "$(gum style --bold --foreground "#81A1C1" "Nordic") GTK Theme has been installed!"
+echo "$(gum style --bold --foreground "#81A1C1" "Nordic") GTK Theme has been installed!" -- sleep 2
 
 ### Icons
 # Installing Papirus Icons
@@ -23,9 +24,10 @@ cp -f Icons/24x24/* /usr/share/icons/Papirus/24x24/places
 cp -f Icons/22x22/* /usr/share/icons/Papirus/22x22/places
 
 # Changing Colors to a more nord-like blue
-bash papirus-folders -t Papirus-Dark -C frostblue3
+# bash papirus-folders -t Papirus-Dark -C frostblue3
+clear
 
-echo "$(gum style --bold --foreground "#81A1C1" "Papirus-Nord") Icons have been installed!"
+echo "$(gum style --bold --foreground "#81A1C1" "Papirus-Nord") Icons have been installed!" -- sleep 2
 
 ### Cursors
 # Making temp folders
@@ -41,4 +43,6 @@ cd Nordzy-cursors
 cd
 rm -rf /home/$username/temp
 
-echo "$(gum style --bold --foreground "#81A1C1" "Nordzy-Cursors") have been installed!"
+echo "$(gum style --bold --foreground "#81A1C1" "Nordzy-Cursors") have been installed!" -- sleep 2
+
+clear

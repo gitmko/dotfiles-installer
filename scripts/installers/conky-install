@@ -8,7 +8,7 @@ echo "This will $(gum style --bold "remove the existing") $(gum style --bold --f
 
 CHOICE=$(gum choose "Yes" "No")
 
-if [[ $oscheck == "arch"]]
+if [[ $oscheck == "arch" ]]
 then
     export GUM_CHOOSE_CURSOR_FOREGROUND="#0f94d2"
 

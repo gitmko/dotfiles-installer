@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 oscheck=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
-builddir=/home/$username/.dwm/
+builddir=/home/$username/.dwm
 username=$(id -u -n 1000)
 
 echo "Do you want to install the $(gum style --bold "alacritty") terminal emulator with a custom $(gum style --bold --foreground "#81A1C1" "nord theme")?" 

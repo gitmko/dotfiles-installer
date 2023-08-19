@@ -23,7 +23,6 @@ then
     then
         echo "Okay, I will not install any $(gum style --bold "browser")."
     fi
-fi
 
 elif [[ $oscheck == "debian" ]]
 then
@@ -44,7 +43,6 @@ then
     then
         echo "Okay, I will not install any $(gum style --bold "browser")."
     fi
-fi
 
 elif [[ $oscheck == "fedora" ]]
 then
