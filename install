@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run the install script with sudo."
+  exit
+fi
+
+username=$(id -u -n 1000)
+builddir=/home/$username/.dwm/
+oscheck=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
+fehbg=/home/$username/.fehbg
+terminal=$(basename "/"$(ps -o cmd -f -p $(cat /proc/$(echo $$)/stat | cut -d \  -f 4) | tail -1 | sed 's/ .*$//'))
+
+# I need a way to check for all applications that have "TERMINAL" in the name or something and to ignore the terminal installation, if a terminal is installed
+# Same as the terminal, need a way to check if there is a BROWSER installed and to not prompt if it's installed, atm i'll add a "skip" option
+
+#### the 'which' command works, have to do some coding tmrw to "shorten" the script length.
+
+if [[ $oscheck == "arch" ]] 
+then
+        # Printing distro check
+	echo "################ Detected distro: Arch (btw) ################"
+        
+        # exporing arch cursor color for gum
+        export GUM_CHOOSE_CURSOR_FOREGROUND="#0f94d2"
+
+        # Dependency installation
+        pacman -Syyu gum curl wget picom lxappearance polkit-gnome volumeicon dunst feh pcmanfm rofi dmenu xorg-xinit xorg unzip zip flameshot ttf-roboto --noconfirm
+                
+                # Installing the nix package manager
+                bash ./scripts/installers/nix/nix-install
+                
+                # Installing the yay AUR helper 
+                bash ./scripts/installers/aur-install # ADD PARU.
+ 
+                # Installing a browser
+                bash ./scripts/installers/browser-install # Add Librewolf and/or Mullvad Browser.
+
+                if [[ $terminal ]]
+                then
+                        # Installing alacritty (nord theme)
+                        bash ./scripts/installers/alacritty-install
+                fi
+
+                # Installing conky (dwm keybinds, nord theme)
+                bash ./scripts/installers/conky-install
+
+                # Installing feh/nitrogen
+                bash ./scripts/installers/wallpaper-install
+
+elif [[ $oscheck == "debian" ]]
+then
+        # Printing distro check
+        echo "################ Detected distro: Debian ################"\
+
+        # exporing arch cursor color for gum
+        export GUM_CHOOSE_CURSOR_FOREGROUND="#a80030"
+
+        # Installing GUM
+        mkdir -p /etc/apt/keyrings
+        curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | tee /etc/apt/sources.list.d/charm.list
+        apt update
+
+        # Dependency installation
+        apt install nala gum -y
+
+        echo "$(gum style --bold Nala) has been installed! $(gum style --italic "(thank me later)")"
+
+        nala install curl wget picom lxappearance policykit-1-gnome volumeicon-alsa feh dunst pcmanfm alacritty suckless-tools rofi make gcc libx11-dev libxft-dev libxinerama-dev xorg unzip zip fonts-roboto flameshot -y
+
+                # Installing the nix package manager
+                bash ./scripts/installers/nix/nix-install
+
+                # Installing a browser
+                bash ./scripts/installers/browser-install # Add Librewolf and/or Mullvad Browser.
+
+                # Installing alacritty (nord theme)
+                bash ./scripts/installers/alacritty-install
+
+                # Installing conky (dwm keybinds, nord theme)
+                bash ./scripts/installers/conky-install
+
+                # Installing feh/nitrogen
+                bash ./scripts/installers/wallpaper-install
+
+elif [[ $oscheck == "fedora" ]]
+then
+        # Printing distro check
+        echo "################ Detected distro: Fedora ################"
+
+        # Installing GUM
+        echo '[charm]
+        name=Charm
+        baseurl=https://repo.charm.sh/yum/
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://repo.charm.sh/yum/gpg.key' | tee /etc/yum.repos.d/charm.repo
+
+        # Installing dependencies
+        yum install gum -y
+        dnf install curl wget dnf-plugins-core xrandr xsetroot picom lxappearance polkit-gnome volumeicon feh dunst pcmanfm alacritty dmenu rofi make gcc libX11-devel libXft-devel libXinerama-devel libXrandr-devel xorg-x11-xinit-session unzip zip google-roboto-fonts flameshot -y
+
+                # Installing the nix package manager
+                bash ./scripts/installers/nix/nix-install
+
+                # Installing a browser
+                bash ./scripts/installers/browser-install # Add Librewolf and/or Mullvad Browser.
+
+                # Installing alacritty (nord theme)
+                bash ./scripts/installers/alacritty-install
+
+                # Installing conky (dwm keybinds, nord theme)
+                bash ./scripts/installers/conky-install
+
+                # Installing feh/nitrogen
+                bash ./scripts/installers/wallpaper-install
+
+else
+        echo "This install script only supports Arch, Fedora and Debian, if you want more distros, make a PR/issue on the github."
+        exit 1
+fi
+
+# Download Nordic Theme and folders
+bash ./scripts/themes
+
+# Installing fonts
+bash ./scripts/fonts
+
+# Copying GTK folder
+cd $builddir/gtk-themes
+cp -r gtk-3.0 /home/$username/.config/
+chown $username:$username /home/$username/.config
+chown $username:$username /home/$username/.config/gtk-3.0
+
+# Compiling
+cd $builddir
+make clean install
+
+# Adding dwm to .xinitrc
+echo "exec dwm" >> /home/$username/.xinitrc
+chown $username:$username /home/$username/.xinitrc
+
+# Confirm that we're done
+echo "the dotfiles have been installed, please reboot!"

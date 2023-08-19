@@ -1,0 +1,96 @@
+username=$(id -u -n 1000)
+builddir=/home/$username/.dwm/
+fehbg=/home/$username/.fehbg
+
+echo "Which $(gum style --bold "wallpaper setter") do you want to install?"
+CHOICE=$(gum choose "feh" "nitrogen" "none")
+       
+if [[ $oscheck == "arch" ]]
+then
+    if [[ "$CHOICE" == "feh" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style --bold "feh")." -- sleep 3
+        pacman -S feh --noconfirm
+        if [[ -e "$fehbg" ]]
+        then
+                mv /home/$username/.fehbg /home/$username/.fehbg.bak
+                cp $builddir/images/.fehbg /home/$username
+                chown $username:$username .fehbg  
+        else
+                cp $builddir/images/.fehbg /home/$username
+                chown $username:$username .fehbg
+        fi
+        echo "$(gum style --bold "Feh") has been installed!"
+
+    elif [[ "$CHOICE" == "nitrogen" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style "nitrogen")." -- sleep 3
+        pacman -S nitrogen --noconfirm
+        nitrogen --set-auto /home/$username/.dwm/images/dwm-mko-wallpaper.png
+        echo "$(gum style --bold "Nitrogen") has been installed!"
+
+    elif [[ "$CHOICE" == "none" ]]
+    then
+        echo "Okay, I will not install any $(gum style --bold "wallpaper setter")."
+    fi
+fi
+
+if [[ $oscheck == "debian" ]]
+then
+    if [[ "$CHOICE" == "feh" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style --bold "feh")." -- sleep 3
+        nala install feh -y
+        if [[ -e "$fehbg" ]]
+        then
+                mv /home/$username/.fehbg /home/$username/.fehbg.bak
+                cp $builddir/images/.fehbg /home/$username
+                chown $username:$username .fehbg  
+        else
+                cp $builddir/images/.fehbg /home/$username
+                chown $username:$username .fehbg
+        fi
+        echo "$(gum style --bold "Feh") has been installed!"
+
+    elif [[ "$CHOICE" == "nitrogen" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style "nitrogen")." -- sleep 3
+        nala install nitrogen -y
+        nitrogen --set-auto /home/$username/.dwm/images/dwm-mko-wallpaper.png
+        echo "$(gum style --bold "Nitrogen") has been installed!"
+
+    elif [[ "$CHOICE" == "none" ]]
+    then
+        echo "Okay, I will not install any $(gum style --bold "wallpaper setter")."
+    fi
+fi
+
+if [[ $oscheck == "fedora" ]]
+then
+    if [[ "$CHOICE" == "feh" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style --bold "feh")." -- sleep 3
+        dnf install feh -y
+        if [[ -e "$fehbg" ]]
+        then
+                mv /home/$username/.fehbg /home/$username/.fehbg.bak
+                cp $builddir/images/.fehbg /home/$username
+                chown $username:$username .fehbg  
+        else
+                cp $builddir/images/.fehbg /home/$username
+                chown $username:$username .fehbg
+        fi
+        echo "$(gum style --bold "Feh") has been installed!"
+
+    elif [[ "$CHOICE" == "nitrogen" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style "nitrogen")." -- sleep 3
+        dnf install nitrogen -y
+        nitrogen --set-auto /home/$username/.dwm/images/dwm-mko-wallpaper.png
+        echo "$(gum style --bold "Nitrogen") has been installed!"
+
+    elif [[ "$CHOICE" == "none" ]]
+    then
+        echo "Okay, I will not install any $(gum style --bold "wallpaper setter")."
+    fi
+fi

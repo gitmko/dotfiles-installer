@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+username=$(id -u -n 1000)
+
+### GTK Theme
+# Installing Nordic GTK Theme to /usr/share/themes
+mkdir -p /usr/share/themes/
+cd /usr/share/themes/
+git clone https://github.com/EliverLara/Nordic.git
+
+echo "$(gum style --bold --foreground "#81A1C1" "Nordic") GTK Theme has been installed!"
+
+### Icons
+# Installing Papirus Icons
+wget -qO- https://git.io/papirus-icon-theme-install | sh
+
+echo "Installing icons..."
+# Replacing with Nord Alternatives
+cp -f Icons/64x64/* /usr/share/icons/Papirus/64x64/places
+cp -f Icons/48x48/* /usr/share/icons/Papirus/48x48/places
+cp -f Icons/32x32/* /usr/share/icons/Papirus/32x32/places
+cp -f Icons/24x24/* /usr/share/icons/Papirus/24x24/places
+cp -f Icons/22x22/* /usr/share/icons/Papirus/22x22/places
+
+# Changing Colors to a more nord-like blue
+bash papirus-folders -t Papirus-Dark -C frostblue3
+
+echo "$(gum style --bold --foreground "#81A1C1" "Papirus-Nord") Icons have been installed!"
+
+### Cursors
+# Making temp folders
+mkdir -p /home/$username/temp
+cd /home/$username/temp/
+
+# Installing Nordzy cursors
+git clone https://github.com/alvatip/Nordzy-cursors
+cd Nordzy-cursors
+./install.sh
+
+# Removing temp folder
+cd
+rm -rf /home/$username/temp
+
+echo "$(gum style --bold --foreground "#81A1C1" "Nordzy-Cursors") have been installed!"

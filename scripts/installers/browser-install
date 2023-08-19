@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+oscheck=$(grep -Po "(?<=^ID=).+" /etc/os-release | sed 's/"//g')
+
+echo "Which $(gum style --bold "browser") do you want to install?"
+CHOICE=$(gum choose "Brave" "Firefox" "No Browser") # Add Librewolf and/or Mullvad Browser.
+
+if [[ $oscheck == "arch" ]]
+then
+    if [[ "$CHOICE" == "Brave" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style --foreground "#ff5500" "Brave")." -- sleep 5
+        yay -S brave-bin --noconfirm
+        cd /usr/bin/; ln -sf brave brave-browser # thanks to claire for this idea, adds compatibility between distributions
+        echo "$(gum style --bold "Brave") has been installed!"
+    elif [[ "$CHOICE" == "Firefox" ]]
+    then
+        echo "Installing $(gum style --bold --foreground "#ff5633" "Firefox")."
+        gum spin --spinner dot --title "Installing $(gum style --foreground "#ff5633" "Firefox")." -- sleep 5
+        pacman -S firefox --noconfirm
+        echo "$(gum style --bold "Firefox") has been installed!"
+    elif [[ "$CHOICE" == "No Browser" ]]
+    then
+        echo "Okay, I will not install any $(gum style --bold "browser")."
+    fi
+fi
+
+elif [[ $oscheck == "debian" ]]
+then
+    if [[ "$CHOICE" == "Brave" ]]
+    then
+        gum spin --spinner dot --title "Installing $(gum style --foreground "#ff5500" "Brave")." -- sleep 5
+        curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/aptsources.list.d/brave-browser-release.list
+        nala update ; nala install brave-browser -y
+        echo "$(gum style --bold "Brave") has been installed!"
+    elif [[ "$CHOICE" == "Firefox" ]]
+    then
+        echo "Installing $(gum style --bold --foreground "#ff5633" "Firefox")."
+        gum spin --spinner dot --title "Installing $(gum style --foreground "#ff5633" "Firefox")." -- sleep 5
+        nala install firefox -y
+        echo "$(gum style --bold "Firefox") has been installed!"
+    elif [[ "$CHOICE" == "No Browser" ]]
+    then
+        echo "Okay, I will not install any $(gum style --bold "browser")."
+    fi
+fi
+
+elif [[ $oscheck == "fedora" ]]
+then
+    if [[ "$CHOICE" == "Brave" ]]
+        then
+            gum spin --spinner dot --title "Installing $(gum style --foreground "#ff5500" "Brave")." -- sleep 5
+            dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/brave-browser.rep
+            rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+            dnf update ; dnf install brave-browser brave-keyring -y
+            echo "$(gum style --bold "Brave") has been installed!"
+        elif [[ "$CHOICE" == "Firefox" ]]
+        then
+            gum spin --spinner dot --title "Installing $(gum style --foreground "#ff5633" "Firefox")." -- sleep 5
+            dnf install firefox -y
+            echo "$(gum style --bold "Firefox") has been installed!"
+        elif [[ "$CHOICE" == "No Browser" ]]
+        then
+            echo "Okay, I will not install any $(gum style --bold "browser")."
+        fi
+fi
