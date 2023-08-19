@@ -56,6 +56,9 @@ then
         # exporing arch cursor color for gum
         export GUM_CHOOSE_CURSOR_FOREGROUND="#a80030"
 
+        # Extras.
+        apt install curl gpg -y
+
         # Installing GUM
         mkdir -p /etc/apt/keyrings
         curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
@@ -89,6 +92,11 @@ then
         # Printing distro check
         echo "################ Detected distro: Fedora ################"
 
+
+
+        # Installing dependencies
+        dnf install curl wget dnf-plugins-core xrandr xsetroot picom lxappearance polkit-gnome volumeicon feh dunst pcmanfm alacritty dmenu rofi make gcc libX11-devel libXft-devel libXinerama-devel libXrandr-devel xorg-x11-xinit-session unzip zip google-roboto-fonts flameshot -y
+
         # Installing GUM
         echo '[charm]
         name=Charm
@@ -96,10 +104,7 @@ then
         enabled=1
         gpgcheck=1
         gpgkey=https://repo.charm.sh/yum/gpg.key' | tee /etc/yum.repos.d/charm.repo
-
-        # Installing dependencies
         yum install gum -y
-        dnf install curl wget dnf-plugins-core xrandr xsetroot picom lxappearance polkit-gnome volumeicon feh dunst pcmanfm alacritty dmenu rofi make gcc libX11-devel libXft-devel libXinerama-devel libXrandr-devel xorg-x11-xinit-session unzip zip google-roboto-fonts flameshot -y
 
                 # Installing the nix package manager
                 bash ./scripts/installers/nix/nix-install
