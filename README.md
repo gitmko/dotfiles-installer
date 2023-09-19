@@ -23,7 +23,7 @@ My [Custom i3wm Configuration](https://github.com/gitmko/i3-mko) with [nvim-mko]
 
 ### Dependencies
 
-You need [gum](https://github.com/charmbracelet/gum) installed for the script to work.
+You need [gum](https://github.com/charmbracelet/gum) installed for the scripts to work.
 
 On Arch systems, do
 ```bash
@@ -52,7 +52,7 @@ Once you've installed gum, run the following commands
 
 ```
 git clone https://github.com/gitmko/dotfiles-installer
-cd dotfiles-installer
+cd dotfiles-installer/scripts
 ./install
 ```
 
