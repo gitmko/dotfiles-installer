@@ -1,6 +1,0 @@
-#!/bin/sh
-# https://github.com/gitmko/dwm-mko
-
-username=$(id -u -n 1000)
-
-feh --no-fehbg --bg-fill /home/$username/.dwm/images/dwm-mko-wallpaper.png

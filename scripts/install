@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -e
+
+gum style --bold 'Insert the name of the project'
+input=$(gum input --placeholder "gitmko/i3-mko")
+dotfiles=$(<dotfiles.lst)
+
+if [[ $dotfiles == *"$input"* ]]; then
+    gum spin --spinner line --title "$(gum style --bold 'Cloning dotfiles...')" -- sleep 5
+    mkdir "$HOME"/dotfiles
+    git clone --quiet https://github.com/"$input" "$HOME"/dotfiles > /dev/null
+    gum style --bold 'Dotfiles cloned'
+
+    gum spin --spinner line --title "$(gum style --bold 'Installing dotfiles...')" -- sleep 10
+    bash "$HOME"/dotfiles/install
+
+    gum style --bold 'Please reboot for all of the changes to take effect.'
+else
+    echo "The name you entered isn't a part of the verified list."
+fi
